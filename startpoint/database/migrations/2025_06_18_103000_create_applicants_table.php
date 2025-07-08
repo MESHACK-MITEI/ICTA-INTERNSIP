@@ -15,7 +15,7 @@ class CreateApplicantsTable extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
         $table->id(); // id (auto-increment integer)
-        $table->string('title', 50);
+        $table->string('title')->nullable();
         $table->string('first_name', 50);
         $table->string('middle_name', 50)->nullable();
         $table->string('last_name', 50);

@@ -16,10 +16,10 @@ class CreateDepartmentsTable extends Migration
         Schema::create('departments', function (Blueprint $table) {
         $table->id(); // id (integer, auto-increment)
         $table->string('name', 255);
-        $table->string('department_head', 150);
+        $table->string('department_head')->nullable(); // Allow null values
         $table->text('description')->nullable();
         $table->boolean('is_active')->default(true);
-        $table->string('created_by', 200);
+        $table->string('created_by', 200)->nullable(); // <- Add nullable here
         $table->timestamps(); // created_at & updated_at
         });
     }

@@ -21,23 +21,28 @@ class ApplicantController extends Controller
     }
 
     // store() - Save new applicant
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email_address' => 'required|email|unique:applicants,email_address',
-            'phone_number' => 'required|string|max:20',
-            'cohort' => 'nullable|string|max:100',
-            'is_active' => 'boolean',
-            'created_by' => 'nullable|string|max:200',
-        ]);
+   public function store(Request $request)
+{
+    $data = $request->validate([
+        'title'         => 'required|string|max:10',
+        'first_name'    => 'required|string|max:255',
+        'middle_name'   => 'nullable|string|max:255',
+        'last_name'     => 'required|string|max:255',
+        'email_address' => 'required|email|unique:applicants,email_address',
+        'phone_number'  => 'required|string|max:20',
+        'cohort'        => 'nullable|string|max:100',
+        'is_active'     => 'boolean',
+        'created_by'    => 'nullable|string|max:200',
+        // no password here
+    ]);
 
-        Applicant::create($data);
+    // assign & hash a default password
+    $data['password'] = bcrypt('password');
 
-        return redirect()->route('applicants.index')->with('success', 'Applicant created successfully!');
-    }
+    Applicant::create($data);
+
+    return redirect()->route('applicants.index')->with('success', 'Applicant created! Default password is “password”');
+}
 
     // show() - Display one applicant
     public function show($id)
@@ -59,15 +64,17 @@ class ApplicantController extends Controller
         $applicant = Applicant::findOrFail($id);
 
         $data = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email_address' => 'required|email|unique:applicants,email_address,' . $applicant->id,
-            'phone_number' => 'required|string|max:20',
-            'cohort' => 'nullable|string|max:100',
-            'is_active' => 'boolean',
-            'created_by' => 'nullable|string|max:200',
-        ]);
+    'title' => 'required|string|max:10',
+    'first_name' => 'required|string|max:255',
+    'middle_name' => 'nullable|string|max:255',
+    'last_name' => 'required|string|max:255',
+    'email_address' => 'required|email|unique:applicants,email_address,' . $applicant->id ?? '',
+    'phone_number' => 'required|string|max:20',
+    'cohort' => 'nullable|string|max:100',
+    'is_active' => 'boolean',
+    'created_by' => 'nullable|string|max:200',
+]);
+
 
         $applicant->update($data);
 
